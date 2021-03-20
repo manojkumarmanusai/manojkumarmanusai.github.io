@@ -7,7 +7,7 @@ async function handleSubmit(event) {
       {
       	alert("Please enter a valid email id");
       	return;
-      }
+      }      
       var data = new FormData(event.target);
       fetch(event.target.action, {
         method: form.method,
@@ -40,6 +40,6 @@ async function handleSubmit(event) {
 }
 
 function removeSpaces(string) {
- return string.split(' ').join('');
+ return string.trim();
 }
 form.addEventListener("submit", handleSubmit)
