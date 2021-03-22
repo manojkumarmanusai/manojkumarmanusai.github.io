@@ -102,7 +102,11 @@ $('#nav').affix({
 
 }());
 
+document.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    doStuff(e);
+}, { passive: false });
 
 }
 main();
-document.addEventListener("mousewheel", this.mousewheel.bind(this), { passive: false });
+
