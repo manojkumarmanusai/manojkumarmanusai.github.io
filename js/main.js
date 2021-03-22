@@ -105,3 +105,4 @@ $('#nav').affix({
 
 }
 main();
+document.addEventListener("mousewheel", this.mousewheel.bind(this), { passive: false });
