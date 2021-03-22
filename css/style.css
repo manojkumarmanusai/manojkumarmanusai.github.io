@@ -46,6 +46,9 @@ a:hover, a:focus {
 ul, ol {
 	list-style: none;
 }
+.onepage-pagination{
+ display: none;
+} 
 .fa-bars{
 color:#ffffff;
 }
