@@ -2,7 +2,7 @@ body, html {
 	font-family: 'Open Sans', sans-serif;
 	text-rendering: optimizeLegibility !important;
 	-webkit-font-smoothing: antialiased !important;
-	color: #000000;
+	color: #656c6d;
 	width: 100% !important;
 	height: 100% !important;
 }
@@ -76,7 +76,7 @@ hr {
 	width: 70px;
 	text-align: center;
 	position: relative;
-	background: #990000;
+	background: #7bc3d1;
 	margin: 0 auto;
 	margin-bottom: 30px;
 	border: 0;
@@ -122,13 +122,13 @@ hr {
 }
 .navbar-custom .nav li a:hover {
 	outline: 0;
-	color: #990000;
+	color: #7bc3d1;
 	background-color: transparent;
 }
 .navbar-custom .nav li a:focus, .navbar-custom .nav li a:active {
 	outline: 0;
 	background-color: transparent;
-	color: #ff4d4d;
+	color: #7bc3d1;
 }
 .navbar-custom .nav li.active {
 	outline: 0;
@@ -162,8 +162,8 @@ hr {
 }
 .btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active {
 	color: #fff;
-	background-color: #990000;
-	border-color: #990000;
+	background-color: #7bc3d1;
+	border-color: #7bc3d1;
 }
 .btn-primary i.fa {
 	margin-right: 10px;
@@ -177,7 +177,7 @@ hr {
 	text-align: center;
 	color: #fff;
 	background: url(../img/intro-bg.jpg) no-repeat center top;
-	background-color: #ff4d4d;
+	background-color: #7bc3d1;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	background-size: cover;
@@ -208,7 +208,7 @@ hr {
 /* Skills Section */
 #skills {
 	padding: 100px 0;
-	background: #cc0000;
+	background: #7bc3d1;
 }
 #skills h2 {
 	color: #fff;
@@ -374,7 +374,7 @@ hr {
 }
 .timeline .timeline-heading h4.subheading {
 	text-transform: none;
-	color: #cc0000;
+	color: #629ca7;
 	font-size: 20px;
 }
 .timeline .timeline-body>p, .timeline .timeline-body>ul {
@@ -384,7 +384,7 @@ hr {
 #contact {
 	padding: 100px 0 40px 0;
 	color: #121d1f;
-	background: #cc0000;
+	background: #7bc3d1;
 }
 #contact h2 {
 	color: #fff;
