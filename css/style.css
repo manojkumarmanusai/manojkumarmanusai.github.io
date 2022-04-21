@@ -46,10 +46,7 @@ a:hover, a:focus {
 ul, ol {
 	list-style: none;
 }
-.blur {
-	-webkit-backdrop-filter: blur(5px);
-  	backdrop-filter: blur(5px);
-}
+
 .fa-bars{
 color:#ffffff;
 }
@@ -144,9 +141,9 @@ hr {
 	color: #fff;
 }
 .btn-default {
-	color: #fff;
+	color: #ecf7f7;
 	background-color: transparent;
-	border-color: #fff;
+	border-color: #ecf7f7;
 	padding: 10px 20px;
 	margin: 0;
 	font-size: 16px;
@@ -512,6 +509,7 @@ section {
 	padding: 120px 0;
 }
 header .intro-text {
+	color:#ecf7f7;
 	padding-top: 300px;
 	padding-bottom: 200px;
 }
