@@ -16,6 +16,12 @@ $(function() {
             if (firstName.indexOf(' ') >= 0) {
                 firstName = name.split(' ').slice(0, -1).join(' ');
             }
+            var $btn = $('#contactForm button[type="submit"]');
+            var btnText = $btn.html();
+            var btnWidth = $btn.outerWidth();
+            var btnHeight = $btn.outerHeight();
+            $btn.css({'width': btnWidth, 'height': btnHeight, 'overflow': 'hidden'});
+            $btn.html('<i class="fa-solid fa-spinner fa-spin"></i> Sending...').prop('disabled', true);
             $.ajax({
                 url: "https://script.google.com/macros/s/AKfycbwFQMM31pMpgWV5Yesz-FqL3NgPX5OS294CmJXnaqcYWJF-Rmi7ng_kXawKC5a94lPt/exec",
                 type: "POST",
@@ -37,6 +43,7 @@ $(function() {
 
                     //clear all fields
                     $('#contactForm').trigger("reset");
+                    $btn.html(btnText).prop('disabled', false).css({'width': '', 'height': '', 'overflow': ''});
                 },
                 error: function() {
                     // Fail message
@@ -47,6 +54,7 @@ $(function() {
                     $('#success > .alert-danger').append('</div>');
                     //clear all fields
                     $('#contactForm').trigger("reset");
+                    $btn.html(btnText).prop('disabled', false).css({'width': '', 'height': '', 'overflow': ''});
                 },
             })
         },

@@ -6,14 +6,15 @@
 <title>Manoj Kumar - Software Engineer</title>
 <meta name="description" content="">
 <meta name="author" content="">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 <!-- Bootstrap -->
 <link rel="stylesheet" type="text/css"  href="css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <!-- Stylesheet
     ================================================== -->
 <link rel="stylesheet" type="text/css"  href="css/style.css">
-<link href='https://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap' rel='stylesheet'>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,800,600,300' rel='stylesheet' type='text/css'>
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -23,15 +24,17 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+<body id="page-top" data-spy="scroll" data-target="#nav" data-offset="80">
 
 <!-- Header -->
 <header id="header">
   <div class="intro">
+    <img src="img/intro-bg.jpg" alt="Background" class="intro-bg-img">
+    <div class="intro-overlay"></div>
     <div class="container">
       <div class="row">
         <div class="intro-text">
-          <h1>Namaste I'm <span class="name">Manoj Kumar</span></h1>
+          <h1>🙏 Namaste I'm <span class="name">Manoj Kumar</span></h1>
           <p><b>Software Engineer based out of Bangalore</b></p>
           <a href="#about" class="btn btn-default btn-lg page-scroll">Learn More</a>
         </div>
@@ -44,7 +47,7 @@
   <nav class="navbar navbar-custom">
     <div class="container">
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"> <i class="fa fa-bars"></i> </button>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"> <i class="fa-solid fa-bars"></i> </button>
         <a class="navbar-brand page-scroll" href="#page-top">Manoj Kumar</a> </div>
       
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -72,9 +75,9 @@
       <div class="col-md-12 text-center"><img src="img/about.jpg" class="img-responsive"></div>
       <div class="col-md-8 col-md-offset-2">
         <div class="about-text">
-          <p>I have around 8 years of experience in various stages of software development activity. This includes design, development, deployment, and user acceptance testing. I got a chance to work with a variety of tech stacks in Windows and Linux environments.</p>
-          <p>My main hobbies are cycling and volunteer service activities with the Sri Sathya Sai Seva Organization. I love traveling and exploring new places. Sometimes circumstances forced me to do cooking as well; later on, it became one of my favorite activities.</p>
-          <p class="text-center"><a class="btn btn-primary" href="resume/Manoj.pdf" download><i class="fa fa-download"></i> Download Resume</a></p>
+          <p>I've been professionally breaking—I mean building—software for a while now 💻. I do everything from the "ooh, shiny idea!" phase to the "why is production on fire?" phase 🔥, with some design, development, deployment, and the always-fun "please don't hate this" user acceptance testing in between. I've hopped between Windows and Linux like a caffeinated squirrel 🐿️, collecting tech stacks with the enthusiasm of a kid in a candy store 🍬—compulsively and with questionable judgment.</p>
+          <p>When I'm not debugging my life choices, I'm out cycling 🚴 (because apparently sitting in a chair for 8+ hours means I need to punish my legs afterward). I also volunteer with the Sri Sathya Sai Seva Organization 🙏, which is great for balancing out all the times I've yelled at my computer 😤. I'm obsessed with traveling ✈️—you know, that thing where you spend money to be uncomfortable in new and exciting ways 🌍. And cooking? Oh boy 👨‍🍳. Started because delivery fees are highway robbery 💸 and I needed to eat something that wasn't instant noodles 🍜. Now it's become one of my favorite ways to unwind—turns out I actually enjoy it!</p>
+          <p class="text-center"><a class="btn btn-primary" href="resume/Manoj.pdf" download><i class="fa-solid fa-download"></i> Download Resume</a></p>
         </div>
       </div>
     </div>
@@ -87,24 +90,24 @@
       <h2>Skills</h2>
       <hr>
     </div>
-    <div class="row" id="skillsset">    
-      <div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="90"> <span class="percent">80</span> </span>
-        <h4>Python</h4>
-      </div> 
-      <div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="80"> <span class="percent">85</span> </span>
-        <h4>Java</h4>
-      </div>    
-       <div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="75"> <span class="percent">95</span> </span>
-        <h4>Angular</h4>
+    <div class="row" id="skillsset">
+      <div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="85"> <span class="percent">80</span> </span>
+        <h4><i class="fa-brands fa-python"></i> Python</h4>
       </div>
-      <div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="75"> <span class="percent">80</span> </span>
-        <h4>Dot Net</h4>
+      <div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="80"> <span class="percent">85</span> </span>
+        <h4><i class="fa-brands fa-java"></i> Java</h4>
+      </div>
+      <div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="70"> <span class="percent">95</span> </span>
+        <h4><i class="fa-brands fa-angular"></i> Angular</h4>
+      </div>
+      <div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="70"> <span class="percent">80</span> </span>
+        <h4><i class="fa-brands fa-microsoft"></i> Dot Net</h4>
       </div>
       <div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="70"> <span class="percent">70</span> </span>
-        <h4>SQL</h4>
+        <h4><i class="fa-solid fa-database"></i> SQL</h4>
       </div>
       <div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="65"> <span class="percent">65</span> </span>
-        <h4>Shell Scripting</h4>
+        <h4><i class="fa-solid fa-terminal"></i> Shell Scripting</h4>
       </div>
     </div>
   </div>
@@ -125,13 +128,19 @@
                 - <br>
                 Present</h4>
             </div>
-            <div class="timeline-panel">
+            <div class="timeline-panel animate-on-scroll fade-right">
               <div class="timeline-heading">
                 <h4>Amazon</h4>
                 <h4 class="subheading">System Development Engineer II</h4>
               </div>
               <div class="timeline-body">
                 <p>Joined the Amazon Ads division in Bengaluru. Working as a developer for various AWS tools that are being used inside the organization.</p>
+                <div class="timeline-tags">
+                  <span class="tag"><i class="fa-brands fa-aws"></i> AWS</span>
+                  <span class="tag"><i class="fa-brands fa-python"></i> Python</span>
+                  <span class="tag"><i class="fa-brands fa-java"></i> Java</span>
+                  <span class="tag"><i class="fa-brands fa-linux"></i> Linux</span>
+                </div>
               </div>
             </div>
           </li>	
@@ -141,13 +150,20 @@
                 - <br>
                 Feb 2024 </h4>
             </div>
-            <div class="timeline-panel">
+            <div class="timeline-panel animate-on-scroll fade-left">
               <div class="timeline-heading">
                 <h4>GE Healthcare</h4>
                 <h4 class="subheading">Senior Software Engineer</h4>
               </div>
               <div class="timeline-body">
                 <p>Worked with different applications that are running inside the CT/PET products. Got a chance to work in different tools and frameworks like Spring boot, Flask, Netflix conductor, Rabbit MQ, Docker, Kubernetes and Helm.</p>
+                <div class="timeline-tags">
+                  <span class="tag"><i class="fa-solid fa-leaf"></i> Spring Boot</span>
+                  <span class="tag"><i class="fa-solid fa-flask"></i> Flask</span>
+                  <span class="tag"><i class="fa-brands fa-docker"></i> Docker</span>
+                  <span class="tag"><i class="fa-solid fa-dharmachakra"></i> Kubernetes</span>
+                  <span class="tag"><i class="fa-solid fa-right-left"></i> RabbitMQ</span>
+                </div>
               </div>
             </div>
           </li>
@@ -157,13 +173,19 @@
                 - <br>
                 May 2016 </h4>
             </div>
-            <div class="timeline-panel">
+            <div class="timeline-panel animate-on-scroll fade-right">
               <div class="timeline-heading">
                 <h4>Geojit Technologies</h4>
                 <h4 class="subheading">Junior Software Engineer</h4>
               </div>
               <div class="timeline-body">
                 <p>Worked with a team that developed the software for share trading, which is written in the Dot net framework. Got hands-on experience with DBMS packages like MYSQL, MySQL, Oracle DB and DB2. Explored JMS implementations like Active MQ and Tibco RV.</p>
+                <div class="timeline-tags">
+                  <span class="tag"><i class="fa-brands fa-microsoft"></i> .NET</span>
+                  <span class="tag"><i class="fa-solid fa-database"></i> MySQL</span>
+                  <span class="tag"><i class="fa-solid fa-database"></i> Oracle DB</span>
+                  <span class="tag"><i class="fa-solid fa-right-left"></i> ActiveMQ</span>
+                </div>
               </div>
             </div>
           </li>
@@ -173,13 +195,18 @@
                 - <br>
                 Feb 2014 </h4>
             </div>
-            <div class="timeline-panel">
+            <div class="timeline-panel animate-on-scroll fade-left">
               <div class="timeline-heading">
                 <h4>iSmart Business Solutions Pvt. Ltd.</h4>
                 <h4 class="subheading">Dot Net Developer</h4>
               </div>
               <div class="timeline-body">
                 <p>Here I was working on an ERP based product that is used for managing agriculture fields. Worked as a developer for the desktop application written in Dot net framework. Handled MS SQL Stored procedures and SQL server reporting services.</p>
+                <div class="timeline-tags">
+                  <span class="tag"><i class="fa-brands fa-microsoft"></i> .NET</span>
+                  <span class="tag"><i class="fa-solid fa-database"></i> MS SQL</span>
+                  <span class="tag"><i class="fa-solid fa-desktop"></i> Desktop App</span>
+                </div>
               </div>
             </div>
           </li>
@@ -204,7 +231,7 @@
                 - <br>
                 2018 </h4>
             </div>
-            <div class="timeline-panel">
+            <div class="timeline-panel animate-on-scroll fade-left">
               <div class="timeline-heading">
                 <h4>Sri Sathya Sai Institute of Higher Learning</h4>
                 <h4 class="subheading">Master of Technology Computer Science</h4>
@@ -220,7 +247,7 @@
                 - <br>
                 2013 </h4>
             </div>
-            <div class="timeline-panel">
+            <div class="timeline-panel animate-on-scroll fade-right">
               <div class="timeline-heading">
                 <h4>Sreepathy Institute of Management And Technology</h4>
                 <h4 class="subheading">Bachelor of Technology Computer Science and Engineering</h4>
@@ -243,21 +270,21 @@
       <hr>
     </div>
     <div class="col-md-8 col-md-offset-2">
-      <div class="col-md-4"> <i class="fa fa-map-marker fa-2x"></i>
+      <div class="col-md-4 animate-on-scroll fade-up" style="animation-delay:0s"> <i class="fa-solid fa-location-dot fa-2x"></i>
         <p>EPIP Zone, Whitefield,<br>
           Bengaluru 560066, Karnataka</p>
       </div>
-      <div class="col-md-4"> <i class="fa fa-envelope-o fa-2x"></i>
+      <div class="col-md-4 animate-on-scroll fade-up" style="animation-delay:0.15s"> <i class="fa-regular fa-envelope fa-2x"></i>
         <p>manusai.manoj@gmail.com</p>
       </div>
-      <div class="col-md-4"> <i class="fa fa-phone fa-2x"></i>
+      <div class="col-md-4 animate-on-scroll fade-up" style="animation-delay:0.3s"> <i class="fa-solid fa-phone fa-2x"></i>
         <p>+9177XXXXXXX</p>
       </div>
       <div class="clearfix"></div>
     </div>
     <div class="col-md-8 col-md-offset-2">
-      <h3>Leave me a message</h3>
-      <form name="sentMessage" name="simple-contact-form" accept-charset="utf-8" id="contactForm" novalidate>
+      <h3 class="animate-on-scroll fade-up">Leave me a message</h3>
+      <form name="sentMessage" name="simple-contact-form" accept-charset="utf-8" id="contactForm" class="animate-on-scroll fade-up" novalidate>
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
@@ -280,14 +307,14 @@
         <div id="success"></div>
         <button type="submit" class="btn btn-default">Send Message</button>
       </form>
-      <div class="social">
+      <div class="social animate-on-scroll fade-up">
         <ul>
-          <li><a href="https://www.facebook.com/manojkumar.manusai" target="_blank"><i class="fa fa-facebook"></i></a></li>
-          <li><a href="https://twitter.com/manojkmanusai" target="_blank"><i class="fa fa-twitter"></i></a></li>
-          <li><a href="https://dribbble.com/manojkumarmanusai" target="_blank"><i class="fa fa-dribbble"></i></a></li>
-          <li><a href="https://github.com/manojkumarmanusai" target="_blank"><i class="fa fa-github"></i></a></li>
-          <li><a href="https://www.instagram.com/manojkumarmanusai/" target="_blank"><i class="fa fa-instagram"></i></a></li>
-          <li><a href="https://www.linkedin.com/in/manoj-kumar-02b6a12b/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+          <li><a href="https://www.facebook.com/manojkumar.manusai" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
+          <li><a href="https://twitter.com/manojkmanusai" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
+          <li><a href="https://leetcode.com/manojkumarmanusai" target="_blank"><span class="social-icon leetcode-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z"/></svg></span></a></li>
+          <li><a href="https://github.com/manojkumarmanusai" target="_blank"><i class="fa-brands fa-github"></i></a></li>
+          <li><a href="https://www.instagram.com/manojkumarmanusai/" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
+          <li><a href="https://www.linkedin.com/in/manojkumarmanusai/" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></li>
         </ul>
       </div>
     </div>
