@@ -60,7 +60,7 @@ function isScrolledIntoView(elem)
 				lineCap: 'round',
 				size: chartSize,
 				onStep: function(from, to, percent) {
-					$(this.el).find('.percent').text(Math.round(percent));
+					$(this.el).find('.percent').text(Math.round(percent) + '%');
 				}
 			});
 		});
