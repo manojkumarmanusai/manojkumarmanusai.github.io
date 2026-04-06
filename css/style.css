@@ -395,27 +395,23 @@ hr {
 #skills .skill h4 {
   font-weight: 600;
   color: #fff;
-  margin-top: 10px;
+  margin-top: 4px;
   font-size: 16px;
   letter-spacing: 0.5px;
 }
 
-#skills .skill h4 .fa,
-#skills .skill h4 .fa-solid,
-#skills .skill h4 .fa-brands {
-  margin-right: 6px;
+#skills .skill-icon {
+  font-size: 20px;
   color: var(--accent);
+  margin-top: 10px;
   transition: var(--transition);
-  display: inline-block;
 }
 
 #skills .skill:hover h4 {
   color: var(--accent);
 }
 
-#skills .skill:hover h4 .fa,
-#skills .skill:hover h4 .fa-solid,
-#skills .skill:hover h4 .fa-brands {
+#skills .skill:hover .skill-icon {
   color: #fff;
   transform: scale(1.3);
 }
@@ -427,6 +423,7 @@ hr {
   height: 120px;
   margin-bottom: 16px;
   text-align: center;
+  margin-left: 0;
 }
 
 .chart canvas {
@@ -503,6 +500,12 @@ hr {
 }
 
 .timeline > li .timeline-panel:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+/* Image hover also lifts the panel */
+.timeline > li .timeline-image:hover ~ .timeline-panel {
   box-shadow: var(--shadow-md);
   transform: translateY(-3px);
 }
