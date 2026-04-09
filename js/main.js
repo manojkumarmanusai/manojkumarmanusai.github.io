@@ -98,7 +98,7 @@ function isScrolledIntoView(elem)
 	// Detect zoom changes via matchMedia (fires on zoom in most browsers)
 	if (window.matchMedia) {
 		var mql = window.matchMedia('(max-width: 767px)');
-		mql.addListener(function() {
+		mql.addEventListener('change', function() {
 			setTimeout(checkChartResize, 100);
 		});
 	}

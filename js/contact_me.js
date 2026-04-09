@@ -16,12 +16,16 @@ $(function() {
             if (firstName.indexOf(' ') >= 0) {
                 firstName = name.split(' ').slice(0, -1).join(' ');
             }
+
+            // Disable button and show spinner
             var $btn = $('#contactForm button[type="submit"]');
-            var btnText = $btn.html();
-            var btnWidth = $btn.outerWidth();
-            var btnHeight = $btn.outerHeight();
-            $btn.css({'width': btnWidth, 'height': btnHeight, 'overflow': 'hidden'});
-            $btn.html('<i class="fa-solid fa-spinner fa-spin"></i> Sending...').prop('disabled', true);
+            var originalText = $btn.html();
+            var w = $btn.outerWidth();
+            var h = $btn.outerHeight();
+            $btn.css({ width: w, height: h })
+                .html('<i class="fa-solid fa-spinner fa-spin"></i> Sending...')
+                .prop('disabled', true);
+
             $.ajax({
                 url: "https://script.google.com/macros/s/AKfycbwFQMM31pMpgWV5Yesz-FqL3NgPX5OS294CmJXnaqcYWJF-Rmi7ng_kXawKC5a94lPt/exec",
                 type: "POST",
@@ -43,7 +47,6 @@ $(function() {
 
                     //clear all fields
                     $('#contactForm').trigger("reset");
-                    $btn.html(btnText).prop('disabled', false).css({'width': '', 'height': '', 'overflow': ''});
                 },
                 error: function() {
                     // Fail message
@@ -54,21 +57,20 @@ $(function() {
                     $('#success > .alert-danger').append('</div>');
                     //clear all fields
                     $('#contactForm').trigger("reset");
-                    $btn.html(btnText).prop('disabled', false).css({'width': '', 'height': '', 'overflow': ''});
                 },
+                complete: function() {
+                    // Always restore button after request finishes
+                    $btn.html(originalText)
+                        .prop('disabled', false)
+                        .css({ width: '', height: '' });
+                }
             })
         },
         filter: function() {
             return $(this).is(":visible");
         },
     });
-
-    $("a[data-toggle=\"tab\"]").click(function(e) {
-        e.preventDefault();
-        $(this).tab("show");
-    });
 });
-
 
 /*When clicking on Full hide fail/success boxes */
 $('#name').focus(function() {
