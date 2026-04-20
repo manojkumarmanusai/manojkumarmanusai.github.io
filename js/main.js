@@ -58,6 +58,7 @@ function isScrolledIntoView(elem)
 				scaleColor: false,
 				lineWidth: 6,
 				lineCap: 'round',
+				animate: 2500,
 				size: chartSize,
 				onStep: function(from, to, percent) {
 					$(this.el).find('.percent').text(Math.round(percent) + '%');
