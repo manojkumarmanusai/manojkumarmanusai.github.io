@@ -68,14 +68,35 @@ function isScrolledIntoView(elem)
 	}
 
 	var chartsInitialized = false;
-	$(document).ready(function(e) {
-	$(document).scroll(function(){
-		if (isScrolledIntoView('#skillsset') && !chartsInitialized){
-			chartsInitialized = true;
-			initCharts();
-		}
-	})
-	});
+
+	if ('IntersectionObserver' in window) {
+		var chartObserver = new IntersectionObserver(function(entries) {
+			entries.forEach(function(entry) {
+				if (entry.isIntersecting && !chartsInitialized) {
+					chartsInitialized = true;
+					initCharts();
+					// Stop observing all cards
+					document.querySelectorAll('#skillsset .skill').forEach(function(el) {
+						chartObserver.unobserve(el);
+					});
+				}
+			});
+		}, { threshold: 0.2 });
+
+		// Observe each skill card instead of the whole container
+		document.querySelectorAll('#skillsset .skill').forEach(function(el) {
+			chartObserver.observe(el);
+		});
+	} else {
+		$(document).ready(function() {
+			$(document).scroll(function(){
+				if (isScrolledIntoView('#skillsset') && !chartsInitialized){
+					chartsInitialized = true;
+					initCharts();
+				}
+			});
+		});
+	}
 
 	// Re-render charts on resize or zoom
 	var resizeTimer;
