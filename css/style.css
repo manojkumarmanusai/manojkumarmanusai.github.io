@@ -8,8 +8,8 @@
   --accent: #c9956b;
   --dark: #1c1218;
   --dark-light: #2b1e24;
-  --text: #4a4048;
-  --text-light: #7a7078;
+  --text: #2a2028;
+  --text-light: #3a3038;
   --bg: #faf8f6;
   --bg-alt: #ffffff;
   --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
@@ -80,7 +80,7 @@ hr {
   width: 50px;
   text-align: center;
   position: relative;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: var(--primary);
   margin: 0 auto 30px;
   border: 0;
   border-radius: 2px;
@@ -286,10 +286,7 @@ hr {
 }
 
 .intro .name {
-  background: linear-gradient(135deg, var(--accent), var(--primary-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent);
 }
 
 .intro p {
@@ -359,7 +356,7 @@ hr {
 }
 
 #skills hr {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: var(--primary);
 }
 
 #skills .skill {
@@ -620,7 +617,7 @@ hr {
 }
 
 #contact hr {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: var(--primary);
 }
 
 #contact h3 {
