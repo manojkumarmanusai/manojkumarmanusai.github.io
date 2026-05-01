@@ -188,6 +188,20 @@ function isScrolledIntoView(elem)
 		$('.animate-on-scroll').addClass('animated');
 	}
 
+	// Scroll Progress Bar
+	var $scrollProgress = $('#scroll-progress');
+	$(window).on('scroll', function() {
+		var aboutTop = $('#about').offset().top;
+		var scrollTop = $(window).scrollTop();
+		if (scrollTop < aboutTop) {
+			$scrollProgress.css('width', '0%');
+			return;
+		}
+		var docHeight = $(document).height() - $(window).height();
+		var scrollPercent = ((scrollTop - aboutTop) / (docHeight - aboutTop)) * 100;
+		$scrollProgress.css('width', Math.min(scrollPercent, 100) + '%');
+	});
+
 }());
 
 }

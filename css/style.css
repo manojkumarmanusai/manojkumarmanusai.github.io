@@ -95,6 +95,18 @@ hr {
   height: 0;
 }
 
+/* ===== Scroll Progress Bar ===== */
+#scroll-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: var(--accent);
+  z-index: 10000;
+  transition: width 0.1s linear;
+}
+
 /* ===== Navigation ===== */
 #nav {
   z-index: 9999;
@@ -111,6 +123,7 @@ hr {
   padding: 12px 0;
   border: none;
   transition: var(--transition);
+  position: relative;
 }
 
 .navbar-custom .navbar-brand {
@@ -130,6 +143,21 @@ hr {
 
 .navbar-custom a {
   color: #f4f5f6;
+}
+
+.navbar-custom .navbar-toggle {
+  border: none;
+}
+
+.navbar-custom .navbar-toggle .fa-bars {
+  color: #fff;
+  font-size: 18px;
+}
+
+.navbar-custom .navbar-toggle:hover,
+.navbar-custom .navbar-toggle:focus {
+  background-color: rgba(255,255,255,0.1);
+  border: none;
 }
 
 .navbar-custom .nav li a {
@@ -302,7 +330,7 @@ hr {
 }
 
 .section-title.center {
-  padding: 25px 0 45px 0;
+  padding: 25px 0 20px 0;
 }
 
 /* ===== About Section ===== */
@@ -324,19 +352,17 @@ hr {
 }
 
 #about img {
-  border-radius: 50%;
-  width: 180px;
-  height: 180px;
+  border-radius: var(--radius);
+  width: 220px;
+  height: 220px;
   display: inline-block;
   object-fit: cover;
-  border: 4px solid #fff;
-  box-shadow: var(--shadow-lg), 0 0 0 8px rgba(122,21,48,0.1);
-  transition: var(--transition);
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
 #about img:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-lg), 0 0 0 12px rgba(122,21,48,0.15);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
 #about p {
@@ -789,13 +815,6 @@ label {
   box-shadow: none;
 }
 
-#contact .btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
 .btn:active, .btn.active {
   background-image: none;
   outline: 0;
@@ -803,8 +822,8 @@ label {
 }
 
 a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
-  outline: none;
-  outline-offset: none;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ===== Footer ===== */
@@ -1251,4 +1270,22 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 ::selection {
   background: var(--primary);
   color: #fff;
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-on-scroll {
+    opacity: 1;
+  }
+
+  #scroll-progress {
+    transition: none;
+  }
 }

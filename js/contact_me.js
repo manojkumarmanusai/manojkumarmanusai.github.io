@@ -1,5 +1,10 @@
 $(function() {
 
+    // Trim whitespace on blur for all form fields
+    $('#contactForm').on('blur', 'input, textarea', function() {
+        this.value = this.value.trim();
+    });
+
     $("input,textarea").jqBootstrapValidation({
         preventSubmit: true,
         submitError: function($form, event, errors) {
@@ -7,6 +12,14 @@ $(function() {
         },
         submitSuccess: function($form, event) {
             event.preventDefault(); // prevent default submit behaviour
+
+            // Honeypot check — if filled, silently reject
+            if ($('input[name="website"]').val()) {
+                $('#success').html("<div class='alert alert-success'><strong>Your message has been sent.</strong></div>");
+                $('#contactForm').trigger("reset");
+                return;
+            }
+
             // get values from FORM
             var name = $("input#name").val();
             var email = $("input#email").val();
@@ -76,7 +89,3 @@ $(function() {
 $('#name').focus(function() {
     $('#success').html('');
 });
-
-function removeSpaces(string) {
- return string.trim();
-}
