@@ -43,8 +43,17 @@ function isScrolledIntoView(elem)
 		return $(window).width() < 768 ? 100 : 120;
 	}
 
+	function getChartColors() {
+		var styles = getComputedStyle(document.documentElement);
+		return {
+			bar: styles.getPropertyValue('--chart-bar').trim() || '#a33350',
+			track: styles.getPropertyValue('--chart-track').trim() || 'rgba(255,255,255,0.12)'
+		};
+	}
+
 	function initCharts() {
 		var chartSize = getChartSize();
+		var chartColors = getChartColors();
 		$('.chart').each(function() {
 			var $chart = $(this);
 			// Remove old canvas if re-initializing
@@ -53,8 +62,8 @@ function isScrolledIntoView(elem)
 			$chart.removeData('easyPieChart');
 			$chart.easyPieChart({
 				easing: 'easeOutBounce',
-				barColor: '#7a1530',
-				trackColor: 'rgba(255,255,255,0.1)',
+				barColor: chartColors.bar,
+				trackColor: chartColors.track,
 				scaleColor: false,
 				lineWidth: 6,
 				lineCap: 'round',
@@ -187,6 +196,48 @@ function isScrolledIntoView(elem)
 		// Fallback: show everything immediately
 		$('.animate-on-scroll').addClass('animated');
 	}
+
+	// Theme toggle — dark is the default; preference persisted in localStorage.
+	// Two buttons share the class: one in the menu group (desktop), one in the
+	// navbar header (always visible on small screens).
+	var $themeToggle = $('.theme-toggle');
+
+	function updateToggleUI(theme) {
+		var $icon = $themeToggle.find('i');
+		if (theme === 'light') {
+			// Light active — offer switch to dark
+			$icon.attr('class', 'fa-solid fa-moon');
+			$themeToggle.attr('aria-label', 'Switch to dark theme');
+		} else {
+			// Dark active — offer switch to light
+			$icon.attr('class', 'fa-solid fa-sun');
+			$themeToggle.attr('aria-label', 'Switch to light theme');
+		}
+	}
+
+	function applyTheme(theme) {
+		if (theme === 'light') {
+			document.documentElement.setAttribute('data-theme', 'light');
+		} else {
+			document.documentElement.removeAttribute('data-theme');
+		}
+		try {
+			localStorage.setItem('theme', theme);
+		} catch (e) { /* localStorage unavailable — theme won't persist */ }
+		updateToggleUI(theme);
+		// Re-render skill charts with the new theme colors
+		if (chartsInitialized) {
+			initCharts();
+		}
+	}
+
+	// Sync the button icon with whatever the head script applied
+	updateToggleUI(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+
+	$themeToggle.on('click', function() {
+		var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+		applyTheme(isLight ? 'dark' : 'light');
+	});
 
 	// Scroll Progress Bar
 	var $scrollProgress = $('#scroll-progress');

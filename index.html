@@ -26,7 +26,16 @@
     ================================================== -->
 <link rel="stylesheet" type="text/css"  href="css/style.css">
 <link href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;600;700;800&display=swap' rel='stylesheet' crossorigin='anonymous'>
-
+<script>
+// Apply saved theme before first paint to avoid a flash. Dark is the default.
+(function () {
+  try {
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  } catch (e) { /* localStorage unavailable — stay on dark default */ }
+})();
+</script>
 </head>
 <body id="page-top" data-spy="scroll" data-target="#nav" data-offset="80">
 
@@ -53,6 +62,7 @@
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse" aria-label="Toggle navigation"> <i class="fa-solid fa-bars"></i> </button>
+        <button type="button" class="theme-toggle theme-toggle-header" aria-label="Switch to light theme" title="Toggle theme"><i class="fa-solid fa-sun" aria-hidden="true"></i></button>
         <a class="navbar-brand page-scroll" href="#page-top">Manoj Kumar</a> </div>
       
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -64,6 +74,9 @@
           <li> <a class="page-scroll" href="#skills">Skills</a> </li>
           <li> <a class="page-scroll" href="#resume">Resume</a> </li>
           <li> <a class="page-scroll" href="#contact">Contact</a> </li>
+          <li class="theme-toggle-item">
+            <button type="button" class="theme-toggle theme-toggle-menu" aria-label="Switch to light theme" title="Toggle theme"><i class="fa-solid fa-sun" aria-hidden="true"></i></button>
+          </li>
         </ul>
       </div>
     </div>
@@ -359,4 +372,4 @@
 <script type="text/javascript" src="js/contact_me.js"></script> 
 <script type="text/javascript" src="js/main.js"></script>
 </body>
-</html>
+</html>
