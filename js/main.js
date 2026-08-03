@@ -173,28 +173,43 @@ function isScrolledIntoView(elem)
 		}
 	});
 
-	// Scroll-triggered animations using Intersection Observer
+	// Scroll-triggered animations: elements animate in on entry and back out
+	// on exit, every time they cross the viewport.
+	// Extend coverage to section titles, skill cards and about content.
+	// (Classes are added via JS so these stay visible if JS is unavailable.)
+	document.querySelectorAll(
+		'.section-title, #skillsset .skill, #about .about-text, #about .col-md-12'
+	).forEach(function(el) {
+		el.classList.add('animate-on-scroll');
+	});
+
 	if ('IntersectionObserver' in window) {
+		// Negative rootMargin shrinks the "visible" zone so exits start while
+		// the element is still on screen — making the previous section visibly
+		// animate out as you scroll into the next one.
 		var animObserver = new IntersectionObserver(function(entries) {
 			entries.forEach(function(entry) {
 				if (entry.isIntersecting) {
-					entry.target.classList.add('animated');
-					// After animation ends, clear animation so hover transitions work
-					entry.target.addEventListener('animationend', function() {
-						this.style.animation = 'none';
-						this.style.opacity = '1';
-					});
-					animObserver.unobserve(entry.target);
+					entry.target.classList.add('in-view');
+					entry.target.classList.remove('exit-top');
+				} else {
+					entry.target.classList.remove('in-view');
+					// Left through the top edge → animate out upward (follows scroll)
+					entry.target.classList.toggle('exit-top', entry.boundingClientRect.top < 0);
 				}
 			});
-		}, { threshold: 0.15 });
+		// Asymmetric margins: no inset at the bottom so elements animate in as
+		// soon as they peek above the fold (important on mobile where cards are
+		// tall); 10% inset at the top keeps the exit visible while scrolling down.
+		// Low threshold so tall elements don't need to be deeply scrolled in.
+		}, { threshold: 0.05, rootMargin: '-10% 0px 0px 0px' });
 
 		document.querySelectorAll('.animate-on-scroll').forEach(function(el) {
 			animObserver.observe(el);
 		});
 	} else {
 		// Fallback: show everything immediately
-		$('.animate-on-scroll').addClass('animated');
+		$('.animate-on-scroll').addClass('in-view');
 	}
 
 	// Theme toggle — dark is the default; preference persisted in localStorage.
