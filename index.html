@@ -18,6 +18,41 @@
 <meta name="twitter:description" content="Namaste! Portfolio showcasing skills, experience and social media links.">
 <meta name="twitter:image" content="https://manojkumarmanusai.github.io/img/about.jpg">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
+<meta name="theme-color" content="#171015">
+<!-- Structured data for search engines -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Manoj Kumar",
+  "jobTitle": "Software Engineer",
+  "worksFor": { "@type": "Organization", "name": "Amazon" },
+  "url": "https://manojkumarmanusai.github.io/",
+  "image": "https://manojkumarmanusai.github.io/img/about.jpg",
+  "email": "mailto:manusai.manoj@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bengaluru",
+    "addressRegion": "Karnataka",
+    "addressCountry": "IN"
+  },
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "Sri Sathya Sai Institute of Higher Learning" },
+    { "@type": "CollegeOrUniversity", "name": "Sreepathy Institute of Management And Technology" }
+  ],
+  "sameAs": [
+    "https://github.com/manojkumarmanusai",
+    "https://www.linkedin.com/in/manojkumarmanusai/",
+    "https://twitter.com/manojkmanusai",
+    "https://leetcode.com/manojkumarmanusai",
+    "https://www.instagram.com/manojkumarmanusai/",
+    "https://www.facebook.com/manojkumar.manusai"
+  ]
+}
+</script>
+<!-- Speed up Google Fonts handshake -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Bootstrap -->
 <link rel="stylesheet" type="text/css"  href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous">
@@ -27,13 +62,23 @@
 <link rel="stylesheet" type="text/css"  href="css/style.css">
 <link href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;600;700;800&display=swap' rel='stylesheet' crossorigin='anonymous'>
 <script>
-// Apply saved theme before first paint to avoid a flash. Dark is the default.
+// Apply the theme before first paint to avoid a flash. A saved choice wins;
+// otherwise first-time visitors get their OS preference; dark is the fallback.
 (function () {
+  var theme = 'dark';
   try {
-    if (localStorage.getItem('theme') === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
+    var saved = localStorage.getItem('theme');
+    if (saved === 'light' || saved === 'dark') {
+      theme = saved;
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      theme = 'light';
     }
   } catch (e) { /* localStorage unavailable — stay on dark default */ }
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) { meta.setAttribute('content', '#faf8f6'); }
+  }
 })();
 </script>
 </head>
@@ -42,7 +87,7 @@
 <!-- Header -->
 <header id="header">
   <div class="intro">
-    <img src="img/intro-bg.jpg" alt="Background" class="intro-bg-img" loading="lazy">
+    <img src="img/intro-bg.jpg" alt="Background" class="intro-bg-img" loading="eager" fetchpriority="high">
     <div class="intro-overlay"></div>
     <div class="container">
       <div class="row">
@@ -57,7 +102,9 @@
 </header>
 <!-- Navigation -->
 <div id="nav">
-  <div id="scroll-progress"></div>
+  <div id="scroll-progress-track" aria-hidden="true" title="Jump to a section of the page">
+    <div id="scroll-progress"></div>
+  </div>
   <nav class="navbar navbar-custom">
     <div class="container">
       <div class="navbar-header">
@@ -311,7 +358,7 @@
           Bengaluru 560066, Karnataka</p>
       </div>
       <div class="col-md-4 animate-on-scroll fade-up" style="transition-delay:0.15s"> <i class="fa-regular fa-envelope fa-2x"></i>
-        <p>manusai.manoj@gmail.com</p>
+        <p><a href="mailto:manusai.manoj@gmail.com" class="contact-link">manusai.manoj@gmail.com</a></p>
       </div>
       <div class="col-md-4 animate-on-scroll fade-up" style="transition-delay:0.3s"> <i class="fa-solid fa-phone fa-2x"></i>
         <p>+9177XXXXXXX</p>
@@ -325,19 +372,19 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <input type="text" id="name" name="name" class="form-control" placeholder="Name" required autocomplete="off" aria-label="Name">
+              <input type="text" id="name" name="name" class="form-control" placeholder="Name" required maxlength="100" autocomplete="off" aria-label="Name">
               <p class="help-block text-danger"></p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <input type="email" id="email" name="replyto" class="form-control" placeholder="Email" required autocomplete="off" aria-label="Email">
+              <input type="email" id="email" name="replyto" class="form-control" placeholder="Email" required maxlength="254" autocomplete="off" aria-label="Email">
               <p class="help-block text-danger"></p>
             </div>
           </div>
         </div>
         <div class="form-group">
-          <textarea name="message" id="message" class="form-control" rows="4" placeholder="Message" required aria-label="Message"></textarea>
+          <textarea name="message" id="message" class="form-control" rows="4" placeholder="Message" required maxlength="1000" aria-label="Message"></textarea>
           <p class="help-block text-danger"></p>
         </div>
         <input type="hidden" name="_subject" id="email-subject" value="Mail from manojkumarmanusai.github.io">
@@ -359,12 +406,13 @@
 </div>
 <div id="footer">
   <div class="container text-center">
+    <a href="#about" class="back-to-top page-scroll" aria-label="Back to top" title="Back to top"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></a>
     <div class="fnav">
       <p>Created by Manoj Kumar.</p>
     </div>
   </div>
 </div>
-<script type="text/javascript" src="js/jquery.1.11.1.js"></script> 
+<script type="text/javascript" src="js/jquery-3.7.1.min.js"></script> 
 <script type="text/javascript" src="js/bootstrap.min.js"></script> 
 <script type="text/javascript" src="js/SmoothScroll.js"></script> 
 <script type="text/javascript" src="js/easypiechart.js"></script> 

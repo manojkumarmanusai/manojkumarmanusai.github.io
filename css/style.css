@@ -3,6 +3,7 @@
 /* CSS Variables for easy theming */
 /* Dark theme is the default; [data-theme="light"] overrides below. */
 :root {
+  color-scheme: dark;
   --primary: #7a1530;
   --primary-dark: #5c1025;
   --primary-light: #a33350;
@@ -34,6 +35,7 @@
   --nav-active-bg: rgba(255,255,255,0.08);
   --nav-hover-bg: rgba(255,255,255,0.1);
   --nav-accent: var(--accent);
+  --brand-glow: rgba(201,149,107,0.3);
 
   /* Forms */
   --input-bg: rgba(255,255,255,0.08);
@@ -70,6 +72,8 @@
 }
 
 [data-theme="light"] {
+  color-scheme: light;
+
   /* Surfaces */
   --bg: #faf8f6;
   --bg-alt: #ffffff;
@@ -92,6 +96,7 @@
   --nav-active-bg: rgba(122,21,48,0.08);
   --nav-hover-bg: rgba(122,21,48,0.06);
   --nav-accent: #7a1530; /* matches the light-theme scroll progress bar */
+  --brand-glow: rgba(122,21,48,0.25);
 
   /* Forms */
   --input-bg: #ffffff;
@@ -205,6 +210,36 @@ hr {
 }
 
 /* ===== Scroll Progress Bar ===== */
+/* Full-width track: invisible, taller hit area so the 3px bar is clickable */
+#scroll-progress-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+/* Faint full-width line on hover — hints that the bar is interactive */
+#scroll-progress-track::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--scroll-progress);
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 0.2s ease, height 0.15s ease;
+}
+
+#scroll-progress-track:hover::after {
+  opacity: 0.25;
+  height: 5px;
+}
+
 #scroll-progress {
   position: absolute;
   bottom: 0;
@@ -212,8 +247,12 @@ hr {
   width: 0%;
   height: 3px;
   background: var(--scroll-progress);
-  z-index: 10000;
-  transition: width 0.1s linear;
+  z-index: 2;
+  transition: width 0.1s linear, height 0.15s ease;
+}
+
+#scroll-progress-track:hover #scroll-progress {
+  height: 5px;
 }
 
 /* ===== Navigation ===== */
@@ -247,7 +286,7 @@ hr {
 
 .navbar-custom .navbar-brand:hover {
   color: var(--nav-accent);
-  text-shadow: 0 0 12px rgba(201,149,107,0.3);
+  text-shadow: 0 0 12px var(--brand-glow);
 }
 
 .navbar-custom a {
@@ -885,6 +924,16 @@ hr {
   text-align: left;
 }
 
+#contact .contact-link {
+  color: inherit;
+}
+
+#contact .contact-link:hover,
+#contact .contact-link:focus {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 label {
   font-size: 12px;
   font-weight: 500;
@@ -993,6 +1042,30 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
   background: var(--footer-bg);
   color: var(--footer-text);
   padding: 30px 0 25px;
+}
+
+#footer .back-to-top {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: var(--social-bg);
+  border: 1px solid var(--card-border);
+  color: var(--footer-link);
+  font-size: 16px;
+  transition: var(--transition);
+}
+
+#footer .back-to-top:hover,
+#footer .back-to-top:focus {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(122,21,48,0.3);
 }
 
 #footer p {

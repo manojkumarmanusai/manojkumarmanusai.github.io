@@ -62,12 +62,11 @@ $(function() {
                     $('#contactForm').trigger("reset");
                 },
                 error: function() {
-                    // Fail message
-                    $('#success').html("<div class='alert alert-danger'>");
-                    $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
-                        .append("</button>");
-                    $('#success > .alert-danger').append("<strong>Sorry " + firstName + ", it seems that my mail server is not responding. Please try again later!");
-                    $('#success > .alert-danger').append('</div>');
+                    // Fail message — user-provided name is inserted via .text() to avoid HTML injection
+                    var $alert = $("<div class='alert alert-danger'></div>");
+                    $alert.append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+                    $alert.append($('<strong></strong>').text("Sorry " + firstName + ", it seems that my mail server is not responding. Please try again later!"));
+                    $('#success').html($alert);
                     //clear all fields
                     $('#contactForm').trigger("reset");
                 },

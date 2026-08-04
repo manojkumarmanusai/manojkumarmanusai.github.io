@@ -134,15 +134,22 @@ function isScrolledIntoView(elem)
 		});
 	}
 
-	// Fallback: poll for zoom changes via devicePixelRatio
-	var lastDPR = window.devicePixelRatio || 1;
-	setInterval(function() {
-		var currentDPR = window.devicePixelRatio || 1;
-		if (currentDPR !== lastDPR) {
-			lastDPR = currentDPR;
+	// Event-driven zoom detection (replaces the old 500ms devicePixelRatio poll):
+	// a media query pinned to the current DPR fires once when zoom changes it,
+	// then re-arms itself against the new value. No timers, no battery tax.
+	function watchZoomChanges() {
+		if (!window.matchMedia) { return; }
+		var mql = window.matchMedia('(resolution: ' + (window.devicePixelRatio || 1) + 'dppx)');
+		var handler = function() {
+			if (mql.removeEventListener) { mql.removeEventListener('change', handler); }
+			else { mql.removeListener(handler); }
 			checkChartResize();
-		}
-	}, 500);
+			watchZoomChanges();
+		};
+		if (mql.addEventListener) { mql.addEventListener('change', handler); }
+		else { mql.addListener(handler); }
+	}
+	watchZoomChanges();
 	
 	/// When you click everywhere in the document
 	$(document).click(function (event) {
@@ -239,6 +246,14 @@ function isScrolledIntoView(elem)
 		try {
 			localStorage.setItem('theme', theme);
 		} catch (e) { /* localStorage unavailable — theme won't persist */ }
+		// Keep the browser chrome (mobile address bar) matching the theme
+		var metaThemeColor = document.querySelector('meta[name="theme-color"]');
+		if (metaThemeColor) {
+			metaThemeColor.setAttribute(
+				'content',
+				getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()
+			);
+		}
 		updateToggleUI(theme);
 		// Re-render skill charts with the new theme colors
 		if (chartsInitialized) {
@@ -266,6 +281,18 @@ function isScrolledIntoView(elem)
 		var docHeight = $(document).height() - $(window).height();
 		var scrollPercent = ((scrollTop - aboutTop) / (docHeight - aboutTop)) * 100;
 		$scrollProgress.css('width', Math.min(scrollPercent, 100) + '%');
+	});
+
+	// Click the progress bar track to jump to that position on the page.
+	// Inverts the progress mapping above: 0% = top of About, 100% = page end.
+	$('#scroll-progress-track').on('click', function(e) {
+		var $track = $(this);
+		var fraction = (e.pageX - $track.offset().left) / $track.outerWidth();
+		fraction = Math.max(0, Math.min(1, fraction));
+		var aboutTop = $('#about').offset().top;
+		var docHeight = $(document).height() - $(window).height();
+		var target = aboutTop + fraction * (docHeight - aboutTop);
+		$('html,body').animate({ scrollTop: target }, 600);
 	});
 
 }());
