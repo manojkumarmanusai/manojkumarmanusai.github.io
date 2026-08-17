@@ -151,6 +151,20 @@ function isScrolledIntoView(elem)
 	}
 	watchZoomChanges();
 	
+	// Swap the hamburger for a close (X) icon while the mobile menu is open.
+	// Bound to Bootstrap's collapse events so it stays correct regardless of
+	// how the menu opens or closes (tap, link click, click-outside).
+	var $navToggle = $('#navbar-toggle');
+	$('.navbar-main-collapse')
+		.on('show.bs.collapse', function () {
+			$navToggle.find('i').attr('class', 'fa-solid fa-xmark');
+			$navToggle.attr({ 'aria-label': 'Close navigation menu', 'aria-expanded': 'true' });
+		})
+		.on('hide.bs.collapse', function () {
+			$navToggle.find('i').attr('class', 'fa-solid fa-bars');
+			$navToggle.attr({ 'aria-label': 'Open navigation menu', 'aria-expanded': 'false' });
+		});
+
 	/// When you click everywhere in the document
 	$(document).click(function (event) {
 	  if (!$(event.target).is('.navbar-collapse *')) {

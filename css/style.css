@@ -295,11 +295,24 @@ hr {
 
 .navbar-custom .navbar-toggle {
   border: none;
+  /* Match the header theme-toggle box so the two align vertically and space evenly.
+     display/centering are set in the mobile media query so Bootstrap's desktop
+     `display: none` (>=768px) still hides the hamburger on large screens. */
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  margin: 6px 8px 6px 0;
+  border-radius: 8px;
 }
 
-.navbar-custom .navbar-toggle .fa-bars {
+.navbar-custom .navbar-toggle .fa-bars,
+.navbar-custom .navbar-toggle .fa-xmark {
   color: var(--nav-text-strong);
   font-size: 18px;
+}
+
+.navbar-custom .navbar-toggle .fa-xmark {
+  font-size: 22px;
 }
 
 .navbar-custom .navbar-toggle:hover,
@@ -1296,6 +1309,13 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
   /* Mobile: always-visible toggle in the navbar header; hide the in-menu one */
   .theme-toggle-header {
     display: inline-flex;
+  }
+
+  /* Flex-center the hamburger contents (only on mobile, where it's shown) */
+  .navbar-custom .navbar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .navbar-custom .nav li.theme-toggle-item {
