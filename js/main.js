@@ -285,7 +285,7 @@ function isScrolledIntoView(elem)
 
 	// Scroll Progress Bar
 	var $scrollProgress = $('#scroll-progress');
-	$(window).on('scroll', function() {
+	function updateScrollProgress() {
 		var aboutTop = $('#about').offset().top;
 		var scrollTop = $(window).scrollTop();
 		if (scrollTop < aboutTop) {
@@ -295,7 +295,12 @@ function isScrolledIntoView(elem)
 		var docHeight = $(document).height() - $(window).height();
 		var scrollPercent = ((scrollTop - aboutTop) / (docHeight - aboutTop)) * 100;
 		$scrollProgress.css('width', Math.min(scrollPercent, 100) + '%');
-	});
+	}
+	$(window).on('scroll', updateScrollProgress);
+	// Set the correct width on load — the browser may restore a non-top scroll
+	// position on refresh, and the scroll event won't fire until the user moves.
+	$(window).on('load', updateScrollProgress);
+	updateScrollProgress();
 
 	// Click the progress bar track to jump to that position on the page.
 	// Inverts the progress mapping above: 0% = top of About, 100% = page end.

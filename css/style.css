@@ -213,7 +213,7 @@ hr {
 /* Full-width track: invisible, taller hit area so the 3px bar is clickable */
 #scroll-progress-track {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
   height: 12px;
@@ -225,10 +225,10 @@ hr {
 #scroll-progress-track::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 3px;
+  height: 5px;
   background: var(--scroll-progress);
   opacity: 0;
   z-index: 1;
@@ -237,15 +237,15 @@ hr {
 
 #scroll-progress-track:hover::after {
   opacity: 0.25;
-  height: 5px;
+  height: 7px;
 }
 
 #scroll-progress {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 0%;
-  height: 3px;
+  height: 5px;
   background: var(--scroll-progress);
   z-index: 2;
   transition: width 0.1s linear, height 0.15s ease;
@@ -875,9 +875,9 @@ hr {
   transition: var(--transition);
 }
 
-#contact .col-md-4:hover i.fa-solid,
-#contact .col-md-4:hover i.fa-regular,
-#contact .col-md-4:hover i.fa-brands {
+#contact .col-md-6:hover i.fa-solid,
+#contact .col-md-6:hover i.fa-regular,
+#contact .col-md-6:hover i.fa-brands {
   transform: scale(1.2);
 }
 
