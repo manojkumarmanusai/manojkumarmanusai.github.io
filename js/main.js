@@ -40,18 +40,26 @@ function isScrolledIntoView(elem)
 
 	// skills chart
 	function getChartSize() {
-		return $(window).width() < 768 ? 100 : 120;
+		var w = $(window).width();
+		if (w <= 480) { return 80; }   // matches the ≤480px CSS chart size
+		if (w < 768) { return 130; }   // matches the mobile CSS chart size
+		return 120;                    // desktop
 	}
 
 	function getChartColors() {
 		var styles = getComputedStyle(document.documentElement);
 		return {
 			bar: styles.getPropertyValue('--chart-bar').trim() || '#a33350',
+			barHover: styles.getPropertyValue('--chart-bar-hover').trim() || '#c9956b',
 			track: styles.getPropertyValue('--chart-track').trim() || 'rgba(255,255,255,0.12)'
 		};
 	}
 
-	function initCharts() {
+	function initCharts(animateMs) {
+		// animateMs: duration of the fill animation. Defaults to 2500ms for the
+		// first reveal; pass 0 for an instant redraw (e.g. theme switch) so the
+		// donuts recolor immediately instead of slowly re-filling from zero.
+		var animate = (typeof animateMs === 'number') ? animateMs : 2500;
 		var chartSize = getChartSize();
 		var chartColors = getChartColors();
 		$('.chart').each(function() {
@@ -62,17 +70,47 @@ function isScrolledIntoView(elem)
 			$chart.removeData('easyPieChart');
 			$chart.easyPieChart({
 				easing: 'easeOutBounce',
-				barColor: chartColors.bar,
+				// barColor as a function lets us switch to the hover color on
+				// mouseover without re-initializing the chart. The chart element
+				// carries a data flag toggled by the hover handlers below.
+				barColor: function() {
+					return $chart.data('hovering')
+						? chartColors.barHover
+						: chartColors.bar;
+				},
 				trackColor: chartColors.track,
 				scaleColor: false,
 				lineWidth: 6,
 				lineCap: 'round',
-				animate: 2500,
+				animate: animate > 0 ? animate : false,
 				size: chartSize,
 				onStep: function(from, to, percent) {
 					$(this.el).find('.percent').text(Math.round(percent) + '%');
 				}
 			});
+		});
+		bindChartHover();
+	}
+
+	// Recolor the donut arc on hover, mirroring the Experience timeline badge's
+	// color change. Flips a data flag (read by the barColor function above) and
+	// re-draws the arc at its current value — no full animation replay.
+	var chartHoverBound = false;
+	function bindChartHover() {
+		if (chartHoverBound) { return; }
+		chartHoverBound = true;
+		$('#skillsset .skill').on('mouseenter', function() {
+			var $chart = $(this).find('.chart');
+			var inst = $chart.data('easyPieChart');
+			if (!inst || !inst.renderer) { return; }
+			$chart.data('hovering', true);
+			inst.renderer.draw(parseFloat($chart.data('percent')) || 0);
+		}).on('mouseleave', function() {
+			var $chart = $(this).find('.chart');
+			var inst = $chart.data('easyPieChart');
+			if (!inst || !inst.renderer) { return; }
+			$chart.data('hovering', false);
+			inst.renderer.draw(parseFloat($chart.data('percent')) || 0);
 		});
 	}
 
@@ -116,7 +154,7 @@ function isScrolledIntoView(elem)
 			var newSize = getChartSize();
 			if (newSize !== lastChartSize) {
 				lastChartSize = newSize;
-				initCharts();
+				initCharts(0);  // instant redraw at the new size — no re-fill replay
 			}
 		}
 	}
@@ -204,7 +242,18 @@ function isScrolledIntoView(elem)
 		el.classList.add('animate-on-scroll');
 	});
 
+	// Give each skill card a stagger index so they cascade in one after another
+	// (consumed by the transition-delay rule in the CSS).
+	document.querySelectorAll('#skillsset .skill').forEach(function(el, i) {
+		el.style.setProperty('--stagger-index', i);
+	});
+
 	if ('IntersectionObserver' in window) {
+		// Live check for the desktop breakpoint (matches the 767px CSS boundary).
+		// Below it, timeline panels animate vertically like everything else;
+		// at/above it they slide horizontally, so their exit is handled specially.
+		var desktopQuery = window.matchMedia('(min-width: 768px)');
+
 		// Negative rootMargin shrinks the "visible" zone so exits start while
 		// the element is still on screen — making the previous section visibly
 		// animate out as you scroll into the next one.
@@ -215,15 +264,35 @@ function isScrolledIntoView(elem)
 					entry.target.classList.remove('exit-top');
 				} else {
 					entry.target.classList.remove('in-view');
-					// Left through the top edge → animate out upward (follows scroll)
-					entry.target.classList.toggle('exit-top', entry.boundingClientRect.top < 0);
+					var leftThroughTop = entry.boundingClientRect.top < 0;
+					// On desktop, timeline panels slide in horizontally
+					// (fade-left/fade-right). Keep their exit symmetric with their
+					// entry — let them retreat back along the same horizontal axis
+					// instead of sliding up — so scrolling up mirrors scrolling
+					// down. On mobile these panels animate vertically, so they
+					// follow the scroll like every other element (exit upward
+					// through the top). All non-timeline elements always follow
+					// the scroll.
+					var isHorizontalPanel =
+						entry.target.classList.contains('timeline-panel') &&
+						desktopQuery.matches;
+					entry.target.classList.toggle(
+						'exit-top',
+						!isHorizontalPanel && leftThroughTop
+					);
 				}
 			});
-		// Asymmetric margins: no inset at the bottom so elements animate in as
-		// soon as they peek above the fold (important on mobile where cards are
-		// tall); 10% inset at the top keeps the exit visible while scrolling down.
-		// Low threshold so tall elements don't need to be deeply scrolled in.
-		}, { threshold: 0.05, rootMargin: '-10% 0px 0px 0px' });
+		// rootMargin is breakpoint-aware (below). On mobile we expand the
+		// bottom margin so elements begin animating in *before* they scroll
+		// into view — this prevents the "blank card waiting to animate" effect
+		// when flicking quickly through the tall, stacked mobile layout. On
+		// desktop we keep a top inset so exits stay visible while scrolling down.
+		}, {
+			threshold: 0.05,
+			rootMargin: desktopQuery.matches
+				? '-10% 0px 0px 0px'
+				: '0px 0px 25% 0px'
+		});
 
 		document.querySelectorAll('.animate-on-scroll').forEach(function(el) {
 			animObserver.observe(el);
@@ -252,10 +321,17 @@ function isScrolledIntoView(elem)
 	}
 
 	function applyTheme(theme) {
+		// Suppress CSS transitions during the swap so themed colors (including
+		// the skill chart's percent number) change instantly instead of slowly
+		// cross-fading. The class is removed on the next frame, restoring the
+		// normal hover/interaction transitions.
+		var root = document.documentElement;
+		root.classList.add('theme-switching');
+
 		if (theme === 'light') {
-			document.documentElement.setAttribute('data-theme', 'light');
+			root.setAttribute('data-theme', 'light');
 		} else {
-			document.documentElement.removeAttribute('data-theme');
+			root.removeAttribute('data-theme');
 		}
 		try {
 			localStorage.setItem('theme', theme);
@@ -265,14 +341,23 @@ function isScrolledIntoView(elem)
 		if (metaThemeColor) {
 			metaThemeColor.setAttribute(
 				'content',
-				getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()
+				getComputedStyle(root).getPropertyValue('--bg').trim()
 			);
 		}
 		updateToggleUI(theme);
-		// Re-render skill charts with the new theme colors
+		// Re-render skill charts with the new theme colors — instantly (0ms),
+		// so switching theme swaps the colors immediately instead of replaying
+		// the slow fill animation.
 		if (chartsInitialized) {
-			initCharts();
+			initCharts(0);
 		}
+
+		// Re-enable transitions after the theme has applied (next frame).
+		window.requestAnimationFrame(function() {
+			window.requestAnimationFrame(function() {
+				root.classList.remove('theme-switching');
+			});
+		});
 	}
 
 	// Sync the button icon with whatever the head script applied
@@ -313,6 +398,56 @@ function isScrolledIntoView(elem)
 		var target = aboutTop + fraction * (docHeight - aboutTop);
 		$('html,body').animate({ scrollTop: target }, 600);
 	});
+
+	// Cursor glow — a soft light that eases toward the pointer. The lag (lerp)
+	// makes it feel calm rather than jittery. Skipped for coarse/touch pointers
+	// and when the user prefers reduced motion. Position is written to CSS
+	// custom properties consumed by the #cursor-glow radial gradient.
+	(function initCursorGlow() {
+		var glow = document.getElementById('cursor-glow');
+		if (!glow) { return; }
+
+		var finePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+		var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (!finePointer || reduceMotion) { return; }
+
+		// Target = actual pointer position; current = eased position we render.
+		var targetX = window.innerWidth / 2;
+		var targetY = window.innerHeight / 2;
+		var currentX = targetX;
+		var currentY = targetY;
+		var visible = false;
+		var rafId = null;
+
+		function render() {
+			// Ease current toward target (0.15 = gentle trailing lag).
+			currentX += (targetX - currentX) * 0.15;
+			currentY += (targetY - currentY) * 0.15;
+			glow.style.setProperty('--cursor-x', currentX + 'px');
+			glow.style.setProperty('--cursor-y', currentY + 'px');
+			rafId = window.requestAnimationFrame(render);
+		}
+
+		document.addEventListener('mousemove', function (e) {
+			targetX = e.clientX;
+			targetY = e.clientY;
+			if (!visible) {
+				visible = true;
+				glow.classList.add('is-visible');
+			}
+			if (rafId === null) { render(); }
+		});
+
+		// Fade out when the pointer leaves the window, back in when it returns.
+		document.addEventListener('mouseleave', function () {
+			visible = false;
+			glow.classList.remove('is-visible');
+		});
+		document.addEventListener('mouseenter', function () {
+			visible = true;
+			glow.classList.add('is-visible');
+		});
+	}());
 
 }());
 

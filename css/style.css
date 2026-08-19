@@ -9,7 +9,6 @@
   --primary-light: #a33350;
   --accent: #c9956b;
   --dark: #1c1218;
-  --dark-light: #2b1e24;
   --radius: 16px;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -60,10 +59,14 @@
 
   /* Skill charts (read by JS) */
   --chart-bar: #a33350;
+  --chart-bar-hover: #c9956b;
   --chart-track: rgba(255,255,255,0.12);
 
   /* Scroll progress bar */
   --scroll-progress: var(--accent);
+
+  /* Cursor glow — warm accent, low opacity; blended with 'screen' on dark */
+  --cursor-glow-color: rgba(201, 149, 107, 0.14);
 
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
@@ -121,10 +124,14 @@
 
   /* Skill charts (read by JS) */
   --chart-bar: #7a1530;
+  --chart-bar-hover: #a33350;
   --chart-track: rgba(28,18,24,0.1);
 
   /* Scroll progress bar — primary maroon for the light theme */
   --scroll-progress: #7a1530;
+
+  /* Cursor glow — soft maroon tint, blended with 'multiply' on light */
+  --cursor-glow-color: rgba(122, 21, 48, 0.10);
 
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
@@ -135,6 +142,15 @@
 /* Reset & Base */
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+/* While switching theme, suppress all transitions so themed colors swap
+   instantly instead of slowly cross-fading. JS adds .theme-switching to
+   <html> for one frame around the theme change. */
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: none !important;
 }
 
 body, html {
@@ -198,15 +214,6 @@ hr {
   margin: 0 auto 30px;
   border: 0;
   border-radius: 2px;
-}
-
-.clearfix:after {
-  visibility: hidden;
-  display: block;
-  font-size: 0;
-  content: " ";
-  clear: both;
-  height: 0;
 }
 
 /* ===== Scroll Progress Bar ===== */
@@ -534,7 +541,7 @@ hr {
 }
 
 .section-title.center {
-  padding: 25px 0 20px 0;
+  padding: 10px 0 20px 0;
 }
 
 /* ===== About Section ===== */
@@ -546,7 +553,7 @@ hr {
 }
 
 #about {
-  padding: 100px 0;
+  padding: 55px 0 100px;
   background: var(--bg);
 }
 
@@ -577,7 +584,7 @@ hr {
 
 /* ===== Skills Section ===== */
 #skills {
-  padding: 100px 0;
+  padding: 55px 0 100px;
   background: var(--section-alt-bg);
 }
 
@@ -613,9 +620,17 @@ hr {
 #skills .skill h4 {
   font-weight: 600;
   color: var(--heading);
-  margin-top: 4px;
+  margin-top: 14px;
   font-size: 16px;
   letter-spacing: 0.5px;
+}
+
+/* Wrapper around the icon + name. On desktop it's transparent (display:contents)
+   so the icon and h4 stack in the card's flex column exactly as before. On
+   mobile it becomes the right-hand column of a two-column card (see the mobile
+   media query). */
+#skills .skill-info {
+  display: contents;
 }
 
 #skills .skill-icon {
@@ -651,6 +666,19 @@ hr {
   height: 120px;
   margin-bottom: 16px;
   text-align: center;
+  border-radius: 50%;
+  transition: box-shadow 0.35s ease, background 0.35s ease;
+}
+
+/* Color-change accent on hover, echoing the Experience timeline badge: the
+   percentage number shifts to the accent color and a soft glow blooms behind
+   the donut. The arc itself is recolored in JS (barColor function). */
+#skills .skill:hover .chart {
+  box-shadow: 0 0 0 6px var(--card-bg-hover), 0 0 24px var(--brand-glow);
+}
+
+#skills .skill:hover .percent {
+  color: var(--accent);
 }
 
 .chart canvas {
@@ -668,11 +696,12 @@ hr {
   line-height: 120px;
   text-align: center;
   position: relative;
+  transition: color 0.35s ease;
 }
 
 /* ===== Resume / Timeline Section ===== */
 #resume {
-  padding: 100px 0;
+  padding: 55px 0 100px;
   background: var(--bg);
 }
 
@@ -815,7 +844,8 @@ hr {
   margin-top: 14px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
+  transition: gap 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .timeline-tags .tag {
@@ -837,6 +867,20 @@ hr {
   background: var(--primary);
   color: #fff;
   border-color: var(--primary);
+}
+
+/* When the whole card is hovered, gently enlarge its tech tags together.
+   The container gap also grows so the scaled tags keep their spacing instead
+   of visually crowding (scale() doesn't affect layout, so the fixed gap would
+   otherwise look smaller as the tags expand into it). */
+.timeline > li .timeline-panel:hover .timeline-tags,
+.timeline > li .timeline-image:hover ~ .timeline-panel .timeline-tags {
+  gap: 18px;
+}
+
+.timeline > li .timeline-panel:hover .timeline-tags .tag,
+.timeline > li .timeline-image:hover ~ .timeline-panel .timeline-tags .tag {
+  transform: scale(1.12);
 }
 
 .timeline-tags .tag .fa,
@@ -861,8 +905,9 @@ hr {
 }
 
 #contact h3 {
-  padding-top: 20px;
-  font-size: 22px;
+  padding-top: 0;
+  margin-top: 0;
+  font-size: 26px;
   font-weight: 400;
   color: var(--heading);
 }
@@ -871,14 +916,7 @@ hr {
 #contact i.fa-regular,
 #contact i.fa-brands {
   color: var(--accent);
-  margin-bottom: 14px;
   transition: var(--transition);
-}
-
-#contact .col-md-6:hover i.fa-solid,
-#contact .col-md-6:hover i.fa-regular,
-#contact .col-md-6:hover i.fa-brands {
-  transform: scale(1.2);
 }
 
 #contact p {
@@ -893,13 +931,13 @@ hr {
 #contact .form-control {
   display: block;
   width: 100%;
-  padding: 14px 18px;
-  font-size: 14px;
+  padding: 20px 24px;
+  font-size: 17px;
   line-height: 1.5;
   color: var(--input-text);
   background-color: var(--input-bg);
   border: 1px solid var(--input-border);
-  border-radius: 12px;
+  border-radius: 14px;
   transition: var(--transition);
 }
 
@@ -937,22 +975,6 @@ hr {
   text-align: left;
 }
 
-#contact .contact-link {
-  color: inherit;
-}
-
-#contact .contact-link:hover,
-#contact .contact-link:focus {
-  color: var(--accent);
-  text-decoration: underline;
-}
-
-label {
-  font-size: 12px;
-  font-weight: 500;
-  float: left;
-}
-
 #contact .social {
   margin-top: 50px;
 }
@@ -966,14 +988,14 @@ label {
 #contact .social i.fa-solid,
 #contact .social i.fa-brands {
   display: inline-block;
-  font-size: 24px;
-  padding: 14px;
+  font-size: 27px;
+  padding: 16px;
   color: var(--social-icon);
   background: var(--social-bg);
   border-radius: 50%;
-  width: 52px;
-  height: 52px;
-  line-height: 24px;
+  width: 60px;
+  height: 60px;
+  line-height: 27px;
   text-align: center;
   vertical-align: top;
   transition: var(--transition);
@@ -991,19 +1013,19 @@ label {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  padding: 14px;
+  font-size: 27px;
+  padding: 16px;
   color: var(--social-icon);
   background: var(--social-bg);
   border-radius: 50%;
-  width: 52px;
-  height: 52px;
+  width: 60px;
+  height: 60px;
   transition: var(--transition);
 }
 
 #contact .social .leetcode-icon svg {
-  width: 24px;
-  height: 24px;
+  width: 27px;
+  height: 27px;
 }
 
 #contact .social .leetcode-icon:hover {
@@ -1017,7 +1039,8 @@ label {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   border: none;
   border-radius: 50px;
-  padding: 14px 40px;
+  padding: 16px 48px;
+  font-size: 16px;
   color: #fff;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -1045,7 +1068,25 @@ label {
   box-shadow: none;
 }
 
-a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
+a:focus-visible, .btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Social icons are circular — clicking one (mouse) should not leave a
+   lingering rectangular outline when you return to the tab. Keyboard focus
+   still shows a ring, shaped round to match the icon. */
+#contact .social a:focus {
+  outline: none;
+}
+
+#contact .social a:focus-visible {
+  outline: none;
+}
+
+#contact .social a:focus-visible i.fa-solid,
+#contact .social a:focus-visible i.fa-brands,
+#contact .social a:focus-visible .leetcode-icon {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -1133,38 +1174,97 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 }
 
 /* Scroll-triggered animations — transition-based so they play on both
-   entry and exit. JS toggles .in-view as elements cross the viewport. */
+   entry and exit. JS toggles .in-view as elements cross the viewport.
+   Pronounced travel + scale so each section visibly emerges as it enters
+   and recedes as it leaves, giving a strong "takes over the screen" feel
+   while scrolling. */
 .animate-on-scroll {
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
 
-/* Hidden (out-of-view) state; .in-view elements use natural opacity/transform */
+/* Hidden (out-of-view) state; .in-view elements use natural opacity/transform.
+   Enters from below, slightly shrunk, so it grows into focus. */
 .animate-on-scroll:not(.in-view) {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(60px) scale(0.96);
 }
 
 .animate-on-scroll.fade-left:not(.in-view) {
-  transform: translateX(-30px);
+  transform: translateX(-60px) scale(0.96);
 }
 
 .animate-on-scroll.fade-right:not(.in-view) {
-  transform: translateX(30px);
+  transform: translateX(60px) scale(0.96);
 }
 
-/* On mobile, all directional animations become fade-up since layout is single column */
+/* On mobile, all directional animations become fade-up since layout is single
+   column — including timeline panels, which drop their horizontal slide. */
 @media(max-width:767px) {
   .animate-on-scroll.fade-left:not(.in-view),
   .animate-on-scroll.fade-right:not(.in-view) {
-    transform: translateY(30px);
+    transform: translateY(60px) scale(0.96);
+  }
+
+  /* Skill cards keep a low-but-nonzero starting opacity on mobile so a fast
+     flick never reveals a fully blank card mid-animation — it shows a faint
+     card that resolves to full as it settles. */
+  #skillsset .skill.animate-on-scroll:not(.in-view) {
+    opacity: 0.15;
+    transform: translateY(40px) scale(0.98);
   }
 }
 
-/* Direction-aware exit: elements leaving through the top edge slide upward,
-   following the scroll. Declared last so it overrides the directional variants. */
+/* Direction-aware exit: elements leaving through the top edge slide upward
+   and recede, following the scroll. Declared last so it overrides the
+   directional variants at every breakpoint (including the mobile fade-up
+   override above), so exits always follow the scroll on mobile. */
 .animate-on-scroll.exit-top:not(.in-view) {
-  transform: translateY(-30px);
+  transform: translateY(-60px) scale(0.96);
+}
+
+/* ===== Staggered reveals =====
+   Items within a group reveal one after another for the "one at a time"
+   cascade. The delay only applies on entry (.in-view); on exit everything
+   leaves together so scrolling up stays snappy. */
+#skillsset .skill.animate-on-scroll.in-view {
+  /* Gentle cascade on mobile; kept short so fast scrolling doesn't leave the
+     later cards visibly waiting. Desktop zeroes this out (below). */
+  transition-delay: calc((var(--stagger-index, 0)) * 45ms);
+}
+
+/* On big screens the skill grid is 3-across and read at a glance, so reveal
+   all cards together (no cascade). The stagger stays on mobile, where the
+   single-column layout benefits from the one-after-another reveal. */
+@media(min-width:768px) {
+  #skillsset .skill.animate-on-scroll.in-view {
+    transition-delay: 0ms;
+  }
+
+  /* "Shell Scripting" wraps to two lines only on mobile; keep it one line on
+     big screens where cards are single-column and the extra break misaligns. */
+  #skills .skill-name-break {
+    display: none;
+  }
+}
+
+/* On mobile, resolve the reveal faster so quick flicks don't reveal a blank
+   card mid-animation. Paired with the pre-load rootMargin in main.js. */
+@media(max-width:767px) {
+  #skillsset .skill.animate-on-scroll {
+    transition-duration: 0.45s;
+  }
+}
+
+.timeline > li .timeline-panel.animate-on-scroll.in-view {
+  transition-delay: 80ms;
+}
+
+/* Section titles lead their section in with no delay, content follows. */
+.section-title.animate-on-scroll.in-view {
+  transition-delay: 0ms;
 }
 
 /* ===== Media Queries ===== */
@@ -1200,7 +1300,7 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
   #skills,
   #resume,
   #contact {
-    padding: 60px 0;
+    padding: 40px 0 60px;
   }
 
   h2 {
@@ -1212,29 +1312,101 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     height: 140px;
   }
 
+  /* Two-column mobile card: chart (percentage) on the left, icon + name
+     stacked on the right. Target ~345x280; scaled down at ≤480px below. */
   #skills .skill {
-    margin-bottom: 24px;
-    padding: 20px 10px;
-    min-height: 180px;
+    margin: 0 auto 18px;
+    max-width: 380px;
+    padding: 36px 20px;
+    min-height: 310px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  #skills .skill .chart {
+    /* Keep the chart a fixed square so the canvas and the line-height
+       centered .percent stay aligned. Do NOT let it flex-grow — stretching
+       the chart pushes the percentage number outside the donut. */
+    flex: 0 0 130px;
+    width: 130px;
+    height: 130px;
+    margin-bottom: 0;
+  }
+
+  /* Right column: icon over name. Sized to content so the chart + info form
+     a group centered in the card (justify-content: center on .skill). */
+  #skills .skill-info {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  #skills .skill-info h4 {
+    margin-top: 0;
+    font-size: 20px;
+    line-height: 1.25;
+    /* Reserve two lines' height so single-line names (Python, Java…) and the
+       two-line "Shell / Scripting" name occupy the same vertical space,
+       keeping the icon vertically aligned across all cards. */
+    min-height: 2.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #skills .skill-icon {
+    font-size: 26px;
+    width: 70px;
+    height: 58px;
   }
 
   .chart {
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
   }
 
   .percent {
-    font-size: 20px;
-    line-height: 100px;
+    font-size: 28px;
+    line-height: 130px;
   }
 
   .timeline > li .timeline-panel {
-    padding: 16px 16px 16px 110px;
+    padding: 16px 16px 16px 120px;
+  }
+
+  /* Inverted (alternating) cards inherit a narrower left padding from the base
+     desktop rule, which sits higher-specificity than the mobile rule above —
+     so their text ran under the badge/ring. Force them to the same 120px
+     padding on mobile so all cards clear the badge equally. */
+  .timeline > li.timeline-inverted > .timeline-panel {
+    padding: 16px 16px 16px 120px;
   }
 
   .timeline > li .timeline-image {
     width: 85px;
     height: 85px;
+    /* Inset from the left so the hover accent ring (6px beyond the badge)
+       sits comfortably inside the card with a small gap, not touching the
+       edge. Text starts at padding-left:120px, clearing the badge+ring. */
+    left: 12px;
+    /* Also nudge it down so the ring's top (6px above the badge) stays inside
+       the card instead of touching/spilling past the top boundary. */
+    top: 8px;
+  }
+
+  /* Bigger, more prominent card on hover. A small scale gives the "grows
+     bigger" feel; extra top/bottom padding adds noticeable height without
+     widening the card or disturbing the 120px badge clearance. */
+  .timeline > li .timeline-panel:hover,
+  .timeline > li .timeline-image:hover ~ .timeline-panel {
+    transform: translateY(-6px) scale(1.02);
+    padding: 40px 16px 40px 120px;
+    box-shadow: var(--shadow-lg);
   }
 
   .timeline > li .timeline-image h4 {
@@ -1244,11 +1416,11 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
   }
 
   .timeline:before {
-    left: 42px;
+    left: 54.5px;
   }
 
   .timeline-tags {
-    gap: 6px;
+    gap: 10px;
   }
 
   .timeline-tags .tag {
@@ -1325,6 +1497,34 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 
 /* Very small screens — 3+3 icon grid */
 @media(max-width:480px) {
+  /* Scale the skill card down on small phones (from the ~345x280 target). */
+  #skills .skill {
+    max-width: 300px;
+    padding: 24px 14px;
+    min-height: 240px;
+  }
+
+  #skills .skill .chart {
+    flex: 0 0 80px;
+    width: 80px;
+    height: 80px;
+  }
+
+  #skills .skill .percent {
+    line-height: 80px;
+    font-size: 18px;
+  }
+
+  #skills .skill-info h4 {
+    font-size: 16px;
+  }
+
+  #skills .skill-icon {
+    font-size: 20px;
+    width: 54px;
+    height: 44px;
+  }
+
   .intro h1 {
     font-size: 26px;
   }
@@ -1334,7 +1534,13 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
   }
 
   .timeline > li .timeline-panel {
-    padding: 14px 14px 14px 100px;
+    padding: 14px 14px 14px 108px;
+  }
+
+  /* Match inverted cards to the same padding at this breakpoint too, so both
+     card types clear the badge equally (overrides the 120px mobile rule). */
+  .timeline > li.timeline-inverted > .timeline-panel {
+    padding: 14px 14px 14px 108px;
   }
 
   .timeline > li .timeline-image {
@@ -1348,7 +1554,7 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
   }
 
   .timeline:before {
-    left: 37px;
+    left: 49.5px;
   }
 
   .timeline .timeline-heading h4.subheading {
@@ -1426,7 +1632,14 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     float: left;
     width: 41%;
     padding: 24px 28px;
-    text-align: right;
+    text-align: left;
+  }
+
+  /* Long descriptions look ragged when right-aligned and get ugly word gaps
+     when justified in this narrow column, so left-align the panel content on
+     left-side cards for clean, readable text. */
+  .timeline > li .timeline-body > p {
+    text-align: left;
   }
 
   .timeline > li .timeline-image {
@@ -1453,9 +1666,9 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     justify-content: flex-start;
   }
 
-  /* Tags flow right on left panels */
+  /* Left-side panels are now left-aligned too, so their tags flow left. */
   .timeline > li:not(.timeline-inverted) .timeline-tags {
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 }
 
@@ -1539,6 +1752,51 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
   color: #fff;
 }
 
+/* ===== Cursor Glow =====
+   A soft radial light that follows the pointer. Positioned via CSS custom
+   properties (--cursor-x / --cursor-y) updated by JS. pointer-events:none so
+   it never blocks interaction; screen blend keeps it soothing rather than
+   harsh. Hidden on touch/coarse pointers and under reduced-motion. */
+#cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0;
+  /* Center the circle on the pointer coordinates. */
+  transform: translate(calc(var(--cursor-x, 50vw) - 50%), calc(var(--cursor-y, 50vh) - 50%));
+  background: radial-gradient(
+    circle,
+    var(--cursor-glow-color) 0%,
+    transparent 65%
+  );
+  mix-blend-mode: screen;
+  /* Gentle lag on movement + a soft fade in/out. */
+  transition: opacity 0.4s ease-out;
+  will-change: transform, opacity;
+}
+
+#cursor-glow.is-visible {
+  opacity: 1;
+}
+
+/* Light theme: screen blend would wash out on a light bg, so soften and
+   switch to a warmer, lower-opacity tint with a multiply-friendly feel. */
+[data-theme="light"] #cursor-glow {
+  mix-blend-mode: multiply;
+}
+
+/* No glow for touch/coarse pointers — there's no hovering cursor to follow. */
+@media (hover: none), (pointer: coarse) {
+  #cursor-glow {
+    display: none;
+  }
+}
+
 /* ===== Reduced Motion ===== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1555,5 +1813,10 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 
   #scroll-progress {
     transition: none;
+  }
+
+  /* No cursor glow when motion is reduced (also guarded in JS). */
+  #cursor-glow {
+    display: none;
   }
 }
