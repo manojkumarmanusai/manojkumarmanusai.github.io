@@ -41,8 +41,8 @@ function isScrolledIntoView(elem)
 	// skills chart
 	function getChartSize() {
 		var w = $(window).width();
-		if (w <= 480) { return 80; }   // matches the ≤480px CSS chart size
-		if (w < 768) { return 130; }   // matches the mobile CSS chart size
+		if (w <= 480) { return 110; }  // matches the ≤480px CSS chart size
+		if (w < 768) { return 190; }   // matches the mobile CSS chart size
 		return 120;                    // desktop
 	}
 
@@ -447,6 +447,28 @@ function isScrolledIntoView(elem)
 			visible = true;
 			glow.classList.add('is-visible');
 		});
+	}());
+
+	// Social links open in a new tab, so the visitor returns to this page.
+	// Briefly highlight the icon the visitor just clicked (see .social-clicked
+	// in CSS), and clear the highlight as soon as they click anywhere else.
+	(function () {
+		var $socialLinks = $('#contact .social ul li a');
+		if (!$socialLinks.length) { return; }
+
+		function clearHighlight() {
+			$socialLinks.removeClass('social-clicked');
+		}
+
+		$socialLinks.on('click', function (e) {
+			// Don't let this same click bubble to the document handler that clears it
+			e.stopPropagation();
+			clearHighlight();
+			$(this).addClass('social-clicked');
+		});
+
+		// Any click elsewhere in the document clears the highlight
+		$(document).on('click', clearHighlight);
 	}());
 
 }());
