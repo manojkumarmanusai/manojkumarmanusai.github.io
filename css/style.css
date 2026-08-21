@@ -59,7 +59,7 @@
 
   /* Skill charts (read by JS) */
   --chart-bar: #a33350;
-  --chart-bar-hover: #c9956b;
+  --chart-bar-hover: var(--primary);
   --chart-track: rgba(255,255,255,0.12);
 
   /* Scroll progress bar */
