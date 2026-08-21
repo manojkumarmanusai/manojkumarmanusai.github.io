@@ -244,7 +244,7 @@ hr {
 
 #scroll-progress-track:hover::after {
   opacity: 0.25;
-  height: 7px;
+  height: 5px;
 }
 
 #scroll-progress {
